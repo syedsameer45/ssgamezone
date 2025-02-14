@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Snake - Premium Arcade</title>
+    <style>
+        :root {
+            --neon-green: #0f0;
+            --dark-bg: #111;
+            --game-border: rgba(0, 255, 0, 0.3);
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #001, #002);
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            color: var(--neon-green);
+        }
+
+        .game-container {
+            position: relative;
+            padding: 2rem;
+            border: 3px solid var(--game-border);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            background: var(--dark-bg);
+        }
+
+        #gameHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 0 1rem;
+        }
+
+        .score-display {
+            font-size: 1.5rem;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        #gameBoard {
+                   border: 5px solid #00ff00;
+                   background-color: #111;
+                                   width: 90vw;   /* 90% of viewport width */
+                   height: 90vw;  /* Maintain square aspect ratio */
+    max-width: 600px;  /* Limit max size on desktops */
+    max-height: 600px;
+}
+        
+
+        .controls {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        button {
+            background: transparent;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            background: rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 15px var(--neon-green);
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .game-over-text {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 20px var(--neon-green);
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div id="gameHeader">
+            <div class="score-display">SCORE: <span id="score">0</span></div>
+            <div class="highscore-display">HIGHSCORE: <span id="highscore">0</span></div>
+        </div>
+        <canvas id="gameBoard" width="400" height="400"></canvas>
+        <div class="controls">
+            <button id="startBtn">▶ START</button>
+            <button id="pauseBtn">⏸ PAUSE</button>
+        </div>
+        <div class="overlay" id="gameOverOverlay">
+            <div class="game-over-text">GAME OVER</div>
+            <button onclick="location.reload()">PLAY AGAIN</button>
+        </div>
+    </div>
+
+    <script>
+        class SnakeGame {
+            constructor() {
+                this.canvas = document.getElementById('gameBoard');
+                this.ctx = this.canvas.getContext('2d');
+                this.blockSize = 20;
+                this.snake = [{x: 200, y: 200}];
+                this.direction = {x: 0, y: 0};
+                this.nextDirection = {x: 0, y: 0};
+                this.food = this.generateFood();
+                this.score = 0;
+                this.highscore = localStorage.getItem('snakeHighscore') || 0;
+                this.gameSpeed = 150;
+                this.isPaused = false;
+                this.isGameOver = false;
+                this.init();
+            }
+
+            init() {
+                this.setupControls();
+                this.updateHighscoreDisplay();
+                this.gameLoop = setInterval(() => this.update(), this.gameSpeed);
+            }
+
+            setupControls() {
+                document.addEventListener('keydown', (e) => this.handleKeyInput(e));
+                startBtn.addEventListener('click', () => this.resetGame());
+                pauseBtn.addEventListener('click', () => this.togglePause());
+            }
+
+            handleKeyInput(e) {
+                if (this.isGameOver) return;
+                
+                switch(e.key) {
+                    case 'ArrowUp': 
+                        if (this.direction.y === 0) this.nextDirection = {x: 0, y: -this.blockSize};
+                        break;
+                    case 'ArrowDown': 
+                        if (this.direction.y === 0) this.nextDirection = {x: 0, y: this.blockSize};
+                        break;
+                    case 'ArrowLeft': 
+                        if (this.direction.x === 0) this.nextDirection = {x: -this.blockSize, y: 0};
+                        break;
+                    case 'ArrowRight': 
+                        if (this.direction.x === 0) this.nextDirection = {x: this.blockSize, y: 0};
+                        break;
+                }
+            }
+
+            update() {
+                if (this.isPaused || this.isGameOver) return;
+                
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                this.moveSnake();
+                this.drawSnake();
+                this.drawFood();
+                this.checkCollision();
+            }
+
+            drawSnake() {
+                this.ctx.fillStyle = '#fff';
+                this.snake.forEach((segment, index) => {
+                    this.ctx.fillRect(segment.x, segment.y, this.blockSize, this.blockSize);
+                    if (index === 0) {
+                        this.ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+                    }
+                });
+            }
+
+            drawFood() {
+                this.ctx.fillStyle = '#ff0000';
+                this.ctx.beginPath();
+                this.ctx.arc(
+                    this.food.x + this.blockSize/2,
+                    this.food.y + this.blockSize/2,
+                    this.blockSize/2, 0, Math.PI * 2
+                );
+                this.ctx.fill();
+            }
+
+            moveSnake() {
+                this.direction = {...this.nextDirection};
+                const head = {
+                    x: this.snake[0].x + this.direction.x,
+                    y: this.snake[0].y + this.direction.y
+                };
+                
+                this.snake.unshift(head);
+                
+                if (head.x === this.food.x && head.y === this.food.y) {
+                    this.handleFoodCollision();
+                } else {
+                    this.snake.pop();
+                }
+            }
+
+            handleFoodCollision() {
+                this.score += 10;
+                document.getElementById('score').textContent = this.score;
+                this.gameSpeed = Math.max(50, this.gameSpeed - 2);
+                clearInterval(this.gameLoop);
+                this.gameLoop = setInterval(() => this.update(), this.gameSpeed);
+                this.food = this.generateFood();
+            }
+
+            generateFood() {
+                let newFood;
+                do {
+                    newFood = {
+                        x: Math.floor(Math.random() * (this.canvas.width / this.blockSize)) * this.blockSize,
+                        y: Math.floor(Math.random() * (this.canvas.height / this.blockSize)) * this.blockSize
+                    };
+                } while (this.snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
+                return newFood;
+            }
+
+            checkCollision() {
+                const head = this.snake[0];
+                
+                if (head.x < 0 || head.x >= this.canvas.width || 
+                    head.y < 0 || head.y >= this.canvas.height ||
+                    this.snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)) {
+                    this.handleGameOver();
+                }
+            }
+
+            handleGameOver() {
+                this.isGameOver = true;
+                clearInterval(this.gameLoop);
+                document.getElementById('gameOverOverlay').style.display = 'flex';
+                
+                if (this.score > this.highscore) {
+                    this.highscore = this.score;
+                    localStorage.setItem('snakeHighscore', this.highscore);
+                    this.updateHighscoreDisplay();
+                }
+            }
+
+            updateHighscoreDisplay() {
+                document.getElementById('highscore').textContent = this.highscore;
+            }
+
+            togglePause() {
+                this.isPaused = !this.isPaused;
+                pauseBtn.textContent = this.isPaused ? '▶ RESUME' : '⏸ PAUSE';
+            }
+
+            resetGame() {
+                clearInterval(this.gameLoop);
+                this.snake = [{x: 200, y: 200}];
+                this.direction = {x: 0, y: 0};
+                this.nextDirection = {x: 0, y: 0};
+                this.food = this.generateFood();
+                this.score = 0;
+                this.gameSpeed = 150;
+                this.isGameOver = false;
+                document.getElementById('score').textContent = '0';
+                document.getElementById('gameOverOverlay').style.display = 'none';
+                this.gameLoop = setInterval(() => this.update(), this.gameSpeed);
+            }
+        }
+
+        // Initialize game
+        const game = new SnakeGame();
+
+        // Mobile swipe support
+        let touchStartX = 0;
+        let touchStartY = 0;
+        const threshold = 50;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        });
+
+        document.addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].screenX;
+            const touchEndY = e.changedTouches[0].screenY;
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            document.addEventListener('touchmove', function(event) {
+    event.preventDefault();
+}, { passive: false });
+
+function openFullscreen() {
+    if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+    }
+}
+
+
+document.addEventListener('click', openFullscreen);
+
+            if (Math.abs(deltaX) > threshold || Math.abs(deltaY) > threshold) {
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    if (deltaX > 0 && game.direction.x === 0) game.nextDirection = {x: game.blockSize, y: 0};
+                    else if (deltaX < 0 && game.direction.x === 0) game.nextDirection = {x: -game.blockSize, y: 0};
+                } else {
+                    if (deltaY > 0 && game.direction.y === 0) game.nextDirection = {x: 0, y: game.blockSize};
+                    else if (deltaY < 0 && game.direction.y === 0) game.nextDirection = {x: 0, y: -game.blockSize};
+                }
+            }
+        });
+    </script>
+</body>
+</html>
