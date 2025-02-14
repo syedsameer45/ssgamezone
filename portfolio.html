@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syed Khaja Sameer - Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #0a0a0a;
+            color: #fff;
+            scroll-behavior: smooth;
+        }
+
+        /* Header Styles */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: rgba(0, 0, 0, 0.9);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4CAF50;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #4CAF50;
+        }
+
+        .hire-me-btn {
+            background: #4CAF50;
+            color: #fff;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .hire-me-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+                        url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 5%;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content span {
+            color: #4CAF50;
+        }
+
+        .hero-content p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            margin: 0 1rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+
+        .primary-btn {
+            background: #4CAF50;
+            color: #fff;
+        }
+
+        .secondary-btn {
+            border: 2px solid #fff;
+            color: #fff;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Projects Section */
+        #projects {
+            padding: 5rem 5%;
+        }
+
+        .projects-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .project-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .project-info {
+            padding: 1.5rem;
+        }
+
+        .project-info h3 {
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .tech-badge {
+            background: #333;
+            color: #fff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .project-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .project-links a:hover {
+            color: #4CAF50;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                display: none;
+            }
+        }
+        /* Certifications Section */
+#certifications {
+    padding: 5rem 5%;
+}
+
+.certifications-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.certifications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.cert-card {
+    background: #1a1a1a;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.cert-card:hover {
+    transform: translateY(-10px);
+}
+
+.cert-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.cert-info {
+    margin-top: 1rem;
+}
+
+.cert-info h3 {
+    color: #4CAF50;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+}
+
+.cert-links {
+    margin-top: 1rem;
+}
+
+.cert-links a {
+    color: #fff;
+    text-decoration: none;
+    background: #4CAF50;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+}
+
+.cert-links a:hover {
+    background: #388E3C;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .certifications-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Contact Section */
+#contact {
+    padding: 5rem 5%;
+    background-color: #222;
+}
+
+.contact-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.contact-container h2 {
+    margin-bottom: 2rem;
+}
+
+.contact-info {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 2rem;
+}
+
+.contact-info div {
+    width: 30%;
+    background: #333;
+    padding: 2rem;
+    border-radius: 15px;
+    transition: transform 0.3s;
+}
+
+.contact-info div:hover {
+    transform: translateY(-5px);
+}
+
+.contact-info div i {
+    font-size: 2rem;
+    color: #4CAF50;
+    margin-bottom: 1rem;
+}
+
+.contact-info div p {
+    font-size: 1rem;
+}
+
+.contact-form {
+    margin-top: 3rem;
+}
+
+.contact-form input, .contact-form textarea {
+    width: 100%;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+}
+
+.contact-form button {
+    background: #4CAF50;
+    color: #141313;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.contact-form button:hover {
+    transform: translateY(-3px);
+}
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">SYED KHAJA SAMEER</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <button class="hire-me-btn">Hire Me</button>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Hi, I'm <span>Syed Khaja Sameer</span></h1>
+            <p>Data Analyst | Full Stack Developer</p>
+            <div class="cta-buttons">
+                <a href="#projects" class="btn primary-btn">View My Work</a>
+                <a href="#contact" class="btn secondary-btn">Contact Me</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="projects-container">
+            <h2>Featured Projects</h2>
+            <div class="projects-grid">
+                <!-- Project 1 -->
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/400x200" alt="Project 1" class="project-img">
+                    <div class="project-info">
+                        <h3>Sales Dashboard System</h3>
+                        <p>Interactive dashboard visualizing sales data across multiple regions with predictive analytics.</p>
+                        <div class="project-tech">
+                            <span class="tech-badge">Power BI</span>
+                            <span class="tech-badge">SQL</span>
+                            <span class="tech-badge">Python</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#"><i class="fab fa-github"></i> Code</a>
+                            <a href="#"><i class="fas fa-external-link-alt"></i> Demo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/400x200" alt="Project 2" class="project-img">
+                    <div class="project-info">
+                        <h3>E-commerce Analytics Platform</h3>
+                        <p>Full-stack web application for real-time business analytics and customer behavior tracking.</p>
+                        <div class="project-tech">
+                            <span class="tech-badge">React</span>
+                            <span class="tech-badge">Node.js</span>
+                            <span class="tech-badge">MongoDB</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#"><i class="fab fa-github"></i> Code</a>
+                            <a href="#"><i class="fas fa-external-link-alt"></i> Demo</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="project-card">
+                    <img src="https://via.placeholder.com/400x200" alt="Project 3" class="project-img">
+                    <div class="project-info">
+                        <h3>Predictive Maintenance System</h3>
+                        <p>Machine learning model predicting equipment failures using sensor data and historical records.</p>
+                        <div class="project-tech">
+                            <span class="tech-badge">Python</span>
+                            <span class="tech-badge">TensorFlow</span>
+                            <span class="tech-badge">Tableau</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#"><i class="fab fa-github"></i> Code</a>
+                            <a href="#"><i class="fas fa-external-link-alt"></i> Demo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="certifications">
+        <div class="certifications-container">
+            <h2>Certifications</h2>
+            <div class="certifications-grid">
+                
+                <!-- Certification 1 -->
+                <div class="cert-card">
+                    <img src="https://via.placeholder.com/400x200" alt="Certification 1" class="cert-img">
+                    <div class="cert-info">
+                        <h3></h3>
+                        <p>Professional Certificate covering SQL, data visualization, and data cleaning.</p>
+                        <div class="cert-tech">
+                            <span class="tech-badge">SQL</span>
+                            <span class="tech-badge">Power BI</span>
+                            <span class="tech-badge">Python</span>
+                        </div>
+                        <div class="cert-links">
+                            <a href="#"><i class="fas fa-certificate"></i> View Certificate</a>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Certification 2 -->
+                <div class="cert-card">
+                    <img src="https://via.placeholder.com/400x200" alt="Certification 2" class="cert-img">
+                    <div class="cert-info">
+                        <h3>IBM Data Science</h3>
+                        <p>Certification focused on machine learning, data analysis, and visualization.</p>
+                        <div class="cert-tech">
+                            <span class="tech-badge">Python</span>
+                            <span class="tech-badge">Machine Learning</span>
+                            <span class="tech-badge">Pandas</span>
+                        </div>
+                        <div class="cert-links">
+                            <a href="#"><i class="fas fa-certificate"></i> View Certificate</a>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Certification 3 -->
+                <div class="cert-card">
+                    <img src="https://via.placeholder.com/400x200" alt="Certification 3" class="cert-img">
+                    <div class="cert-info">
+                        <h3>Microsoft Azure AI Fundamentals</h3>
+                        <p>Certification on AI concepts, cloud computing, and cognitive services.</p>
+                        <div class="cert-tech">
+                            <span class="tech-badge">Azure</span>
+                            <span class="tech-badge">AI</span>
+                            <span class="tech-badge">Cloud Computing</span>
+                        </div>
+                        <div class="cert-links">
+                            <a href="#"><i class="fas fa-certificate"></i> View Certificate</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact">
+        <div class="contact-container">
+            <h2>Get in Touch</h2>
+            <div class="contact-info">
+                <div>
+                    <i class="fas fa-phone-alt"></i>
+                    <p>+91 9347141387</p>
+                </div>
+                <div>
+                    <i class="fas fa-envelope"></i>
+                    <p>sameersyed0111@gmail.com</p>
+                </div>
+                <div>
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>Nellore,Andhra Pradesh,India</p>
+                </div>
+            </div>
+            <div class="contact-form">
+                <form action="#" method="POST">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                    <input type="email" name="email" placeholder="Your Email" required>
+                    <textarea name="message" placeholder="Your Message" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Syed Khaja Sameer | All Rights Reserved</p>
+    </footer>
+
+</body>
+</html>
